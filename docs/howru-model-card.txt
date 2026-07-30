@@ -13,17 +13,17 @@ A person may say that they are tired, that they wrote to someone, that they miss
 Its basic movement is:
 
 ```text
-Q
+HUMAN
 → RESONATING
 → HOWRU
 ```
 
-The human utterance enters as `Q`. The model then produces a visible `/RESONATING/` passage in which the utterance expands through nearby meanings, implications, associations, grammatical relations, and emotional directions. Finally, `HOWRU` returns to direct contact with the person.
+The human utterance enters as `HUMAN`. The model then produces a visible `/RESONATING/` passage in which the utterance expands through nearby meanings, implications, associations, grammatical relations, and emotional directions. Finally, `HOWRU` returns to direct contact with the person.
 
 A typical record looks like this:
 
 ```text
-Q: i miss leo
+HUMAN: i miss leo
 
 /RESONATING:
 Leo appears inside an expression of absence, which makes the name personally significant even if the model has never encountered it before. Missing someone means that the person is absent while their importance remains active. The history between them is still unknown, so it should not be filled with an invented explanation./
@@ -76,7 +76,7 @@ A phrase may activate a person, an action, a direction, a time relation, an emot
 For example:
 
 ```text
-Q: i wrote to fedya
+HUMAN: i wrote to fedya
 
 /RESONATING:
 Writing to Fedya places Fedya on the receiving side of a completed act of contact. The sentence does not reveal whether the message was practical, intimate, apologetic, or accidental, but it does create a possible state of waiting after the action./
@@ -158,7 +158,7 @@ Warmth is essential, but warmth does not mean constant reassurance, agreement, s
 Howru uses a stable textual ritual:
 
 ```text
-Q: <human utterance>
+HUMAN: <human utterance>
 
 /RESONATING:
 <visible resonating passage>/
@@ -171,7 +171,7 @@ The format is learned through ordinary next-token prediction. It does not requir
 During inference, the system supplies:
 
 ```text
-Q: <human utterance>
+HUMAN: <human utterance>
 
 /RESONATING:
 ```
@@ -193,7 +193,7 @@ It should not become a checklist. It should read as one continuous movement.
 For a casual message:
 
 ```text
-Q: made coffee
+HUMAN: made coffee
 
 /RESONATING:
 A small completed act, probably connected to waking up, pausing, or simply wanting coffee. Nothing in the message asks to be made heavier than that./
@@ -204,7 +204,7 @@ HOWRU: Good coffee?
 For a more emotionally weighted message:
 
 ```text
-Q: i dont want to go home
+HUMAN: i dont want to go home
 
 /RESONATING:
 Home is usually a destination, but here it appears as something being avoided. The sentence does not explain whether the resistance comes from a person, a memory, exhaustion, conflict, or simply the need for more time elsewhere. The important movement is away rather than toward./
@@ -254,7 +254,7 @@ Most importantly, Howru asks whether useful intelligence must always grow by bec
 
 ## Core Definition
 
-Howru is Q trained on contact.
+Howru is a contact-trained descendant of Q.
 
 Its transformer is the linguistic substrate. Its resonant mechanisms form the changing field. Its dataset gives the model its instincts, scale, warmth, restraint, and understanding of ordinary human relations.
 

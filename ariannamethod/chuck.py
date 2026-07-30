@@ -3,7 +3,7 @@ chuck.py — the Chuck optimizer via notorch (nt_tape_chuck_step). No torch.opti
 
 The self-aware optimizer (loss-aware damping, per-parameter gradient monitoring,
 stagnation noise, parameter freezing, macro-patience) — the real C implementation,
-used here to train PostGPT-Q's ε substrate from scratch without PyTorch.
+used here to train Howru's epsilon substrate from scratch without PyTorch.
 """
 
 from .notorch_nn import _lib

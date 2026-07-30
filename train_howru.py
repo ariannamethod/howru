@@ -1,21 +1,17 @@
 """
-train_q_notorch.py — train PostGPT-Q's ε substrate from scratch on notorch (no PyTorch).
+train_howru.py — train Howru's epsilon substrate from scratch on notorch.
 
-Q's weights were originally trained on an A100 with torch. This trains the same
-transformer substrate (triple gated attention: Content + RRPRAM + Janus echo) on the
-notorch autograd tape via the ariannamethod/ ctypes shim, with the real Chuck
-optimizer, and exports the QPTQ .bin that postgpt_q.c / .py / .html load directly.
-
-The runtime, the tokenizer (q.merges), and the .bin format are unchanged — only the
-training path is now torch-free. q-coherence-from-scratch, trained from scratch.
+This trains the Howru transformer substrate (triple gated attention: Content,
+RRPRAM, and Janus echo) on the notorch autograd tape through the ariannamethod/
+ctypes shim, with the Chuck optimizer, and exports the .bin layout consumed by
+howru.c.
 
 Usage:
-    python3 train_q_notorch.py [--steps N] [--variant rrpram3_janus3|rrpram_6r] [--save out.bin]
+    python3 train_howru.py [--steps N] [--variant rrpram3_janus3|rrpram_6r] [--save out.bin]
 
-Note (v1): the per-mechanism gate bias (gbs) IS trained, via the augmented-gate trick
-(gws_aug's last column, see notorch_nn.py / export_qptq below). The magnitude
-"transformer gate" is inference-only (applied by postgpt_q.c), so training optimizes
-raw logits — q stays silent at inference until weights earn magnitude, by design.
+The per-mechanism gate bias is trained through the augmented-gate trick:
+gws_aug's last column is split into the runtime gate bias during export. The
+magnitude transformer gate is inference-only, so training optimizes raw logits.
 """
 
 import os
@@ -26,12 +22,58 @@ import struct
 import random
 import argparse
 
-# Reuse q's own BPE (import-safe: postgpt_q.py guards main) so vocab matches inference.
-import postgpt_q as Q
-from ariannamethod import QEngine, ChuckOptimizer, Tensor, softmax, multinomial, seed
+from ariannamethod import HowruEngine, ChuckOptimizer, Tensor, seed
 
-QPTQ_MAGIC = 0x51505451
-QPTQ_VERSION = 1
+HWRU_WEIGHT_MAGIC = 0x51505451
+HWRU_WEIGHT_VERSION = 1
+
+
+class BPE:
+    def __init__(self):
+        self.merges = []
+        self.vocab_size = 256
+        self.vocab_bytes = {i: bytes([i]) for i in range(256)}
+
+
+def bpe_load(bpe, path):
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+    except OSError:
+        return False
+    if len(raw) < 4:
+        return False
+    n = struct.unpack_from("<I", raw, 0)[0]
+    off = 4
+    bpe.merges = []
+    bpe.vocab_size = 256 + n
+    bpe.vocab_bytes = {i: bytes([i]) for i in range(256)}
+    for _ in range(n):
+        if off + 12 > len(raw):
+            return False
+        a, b, nid = struct.unpack_from("<III", raw, off)
+        off += 12
+        bpe.merges.append((a, b, nid))
+        left = bpe.vocab_bytes.get(a, b"")
+        right = bpe.vocab_bytes.get(b, b"")
+        bpe.vocab_bytes[nid] = left + right
+    return True
+
+
+def bpe_encode(bpe, data):
+    ids = list(data)
+    for a, b, nid in bpe.merges:
+        out = []
+        i = 0
+        while i < len(ids):
+            if i + 1 < len(ids) and ids[i] == a and ids[i + 1] == b:
+                out.append(nid)
+                i += 2
+            else:
+                out.append(ids[i])
+                i += 1
+        ids = out
+    return ids
 
 VARIANTS = {
     "rrpram3_janus3": dict(NC=0, NR=3, NJ=3),
@@ -76,8 +118,8 @@ def build_params(cfg):
     return P
 
 
-def export_qptq(params, cfg, path):
-    """Write the QPTQ .bin — byte-identical layout to tools/export_q_weights.py."""
+def export_howru_weights(params, cfg, path):
+    """Write the Howru .bin in the QPTQ-compatible runtime layout."""
     V, D, NH, NL, CTX = cfg["V"], cfg["D"], cfg["NH"], cfg["NL"], cfg["CTX"]
     NC, NR, NJ, HD, nm = cfg["NC"], cfg["NR"], cfg["NJ"], cfg["HD"], cfg["nm"]
     state = {"i": 0}
@@ -89,8 +131,8 @@ def export_qptq(params, cfg, path):
         f.write(struct.pack("<%df" % len(vals), *vals))
 
     with open(path, "wb") as f:
-        f.write(struct.pack("<I", QPTQ_MAGIC))
-        f.write(struct.pack("<10I", QPTQ_VERSION, V, D, NH, NL, CTX, NC, NR, NJ, HD))
+        f.write(struct.pack("<I", HWRU_WEIGHT_MAGIC))
+        f.write(struct.pack("<10I", HWRU_WEIGHT_VERSION, V, D, NH, NL, CTX, NC, NR, NJ, HD))
         wf(f, nxt())  # tok
         wf(f, nxt())  # pos
         for _ in range(NL):
@@ -134,12 +176,12 @@ def train(args):
     seed(42); random.seed(42)
 
     print("[1] BPE + tokenize howru.txt ...")
-    bpe = Q.BPE()
-    if not Q.bpe_load(bpe, merges_path):
+    bpe = BPE()
+    if not bpe_load(bpe, merges_path):
         print("ERROR: bpe_load failed"); return
     with open(corpus_path, "rb") as f:
         raw = f.read()
-    ids = Q.bpe_encode(bpe, raw, len(raw), len(raw))
+    ids = bpe_encode(bpe, raw)
     print(f"  tokens={len(ids)} vocab={bpe.vocab_size}")
 
     cfg = make_cfg(args.variant, bpe.vocab_size, CTX=args.ctx)
@@ -150,7 +192,7 @@ def train(args):
     print(f"  {nparams:,} params, {len(params)} tensors")
 
     optimizer = ChuckOptimizer(lr=args.lr, max_grad_norm=1.0)
-    engine = QEngine(params, cfg, optimizer)
+    engine = HowruEngine(params, cfg, optimizer)
 
     print(f"[3] train {args.steps} steps (seq_len={args.seq_len}) ...")
     losses = []; t0 = time.time()
@@ -167,15 +209,15 @@ def train(args):
     print(f"\n  first10={first:.4f}  last10={last:.4f}  delta={last-first:.4f}  (uniform floor ln(V)={math.log(cfg['V']):.3f})")
 
     if args.save:
-        export_qptq(params, cfg, args.save)
-        print(f"[4] exported QPTQ -> {args.save} ({os.path.getsize(args.save)/1024:.1f} KB)")
+        export_howru_weights(params, cfg, args.save)
+        print(f"[4] exported Howru weights -> {args.save} ({os.path.getsize(args.save)/1024:.1f} KB)")
 
-    print("\n  done. notorch trained q's substrate. no torch.")
+    print("\n  done. notorch trained Howru's substrate. no torch.")
     return losses
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Train PostGPT-Q substrate on notorch (no PyTorch)")
+    ap = argparse.ArgumentParser(description="Train Howru substrate on notorch (no PyTorch)")
     ap.add_argument("--steps", type=int, default=200)
     ap.add_argument("--variant", type=str, default="rrpram3_janus3", choices=list(VARIANTS))
     ap.add_argument("--seq_len", type=int, default=64)
@@ -184,7 +226,7 @@ def main():
     ap.add_argument("--save", type=str, default="")
     args = ap.parse_args()
     print("=" * 60)
-    print("  PostGPT-Q substrate training on notorch + Chuck")
+    print("  Howru substrate training on notorch + Chuck")
     print("=" * 60)
     train(args)
 

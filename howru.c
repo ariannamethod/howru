@@ -1,8 +1,8 @@
 /*
- * howru.c — Howru: Q trained on contact (with SQLite persistence)
+ * howru.c — Howru contact-resonance engine (with SQLite persistence)
  *
- * Standalone C inference engine with full SQLite memory, like PostGPT-Q.
- * Format: Q: <user text> -> /RESONATING/ -> HOWRU: <response>
+ * Standalone C inference engine with full SQLite memory.
+ * Format: HUMAN: <user text> -> /RESONATING/ -> HOWRU: <response>
  *
  * Build: cc howru.c -O2 -std=c11 -lm -lsqlite3 -o howru
  * Run:   ./howru [weights.bin] howru.merges howru.txt
@@ -39,7 +39,7 @@
 #define MAX_DOCS        32
 #define MAX_DOC_TOKENS  128
 #define TOP_K           24
-#define QPTQ_MAGIC      0x51505451u
+#define HWRU_WEIGHT_MAGIC 0x51505451u
 #define HWRU_MAGIC      0x48575255u
 #define HWRU_VERSION    1u
 #define FIELD_WINDOW    16
@@ -611,7 +611,7 @@ static int ch_dominant(const Chambers *c) {
     return dom;
 }
 
-/* ───────────────────────── QPTQ transformer ───────────────────────── */
+/* ───────────────────────── Howru transformer weights ───────────────────────── */
 
 typedef struct {
     int V, D, NH, NL, CTX, NC, NR, NJ, HD;
@@ -633,8 +633,8 @@ static int tf_load(TF *t, const char *path) {
     FILE *f = fopen(path, "rb");
     if (!f) { fprintf(stderr, "ERROR: %s\n", path); return 0; }
     uint32_t magic = 0, ver = 0, v, d, nh, nl, ctx, nc, nr, nj, hd;
-    if (fread(&magic, 4, 1, f) != 1 || magic != QPTQ_MAGIC) {
-        fprintf(stderr, "bad QPTQ magic\n");
+    if (fread(&magic, 4, 1, f) != 1 || magic != HWRU_WEIGHT_MAGIC) {
+        fprintf(stderr, "bad Howru weight magic\n");
         fclose(f);
         return 0;
     }
@@ -912,9 +912,9 @@ static void expert_init(Expert *e, int D) {
     e->trace = xcalloc((size_t)DOE_RANK * D, sizeof(float));
     e->vitality = 1;
     for (int i = 0; i < DOE_RANK * D; i++)
-        e->A[i] = 0.01f * ((float)rand() / RAND_MAX - 0.5f);
+        e->A[i] = 0.01f * ((float)rand() / (float)RAND_MAX - 0.5f);
     for (int i = 0; i < D * DOE_RANK; i++)
-        e->B[i] = 0.01f * ((float)rand() / RAND_MAX - 0.5f);
+        e->B[i] = 0.01f * ((float)rand() / (float)RAND_MAX - 0.5f);
 }
 
 static void parl_init(Parliament *p, int D) {
@@ -1091,27 +1091,7 @@ static const ResonantDoc *docs_choose(const Docs *ds, const int *input, int n, c
 
 /* ───────────────────────── SQLite persistence ───────────────────────── */
 
-static void qsqlite_escape(const char *in, char *out, size_t out_sz) {
-    size_t w = 0;
-    for (size_t i = 0; in[i] && w + 2 < out_sz; i++) {
-        if (in[i] == '\'') out[w++] = '\'';
-        out[w++] = in[i];
-    }
-    out[w] = 0;
-}
-
-/* Experience log (simplified) */
-typedef struct {
-    float last_scar;
-    float last_wormhole_success;
-    float last_prophecy_pressure;
-    float last_chunk_resonance;
-    int step;
-} ExperienceLog;
-
-static ExperienceLog QEXP = { 0 };
-
-static int qsqlite_load(MetaW *mw, const char *path, PeriodicTable *pt, Chambers *ch) {
+static int howru_sqlite_load(MetaW *mw, const char *path, PeriodicTable *pt, Chambers *ch) {
     if (access(path, F_OK) != 0) return 0;
     sqlite3 *db;
     if (sqlite3_open(path, &db) != SQLITE_OK) return 0;
@@ -1225,7 +1205,7 @@ static int qsqlite_load(MetaW *mw, const char *path, PeriodicTable *pt, Chambers
     return 1;
 }
 
-static int qsqlite_save(const MetaW *mw, const char *path, const PeriodicTable *pt, const Chambers *ch) {
+static int howru_sqlite_save(const MetaW *mw, const char *path, const PeriodicTable *pt, const Chambers *ch) {
     sqlite3 *db;
     if (sqlite3_open(path, &db) != SQLITE_OK) return 0;
     char *err = NULL;
@@ -1321,10 +1301,10 @@ static int qsqlite_save(const MetaW *mw, const char *path, const PeriodicTable *
 
 /* ───────────────────────── Spore (binary fallback) ───────────────────────── */
 
-#define QSPORE_MAGIC 0x51535052u
-#define QSPORE_VERSION 1u
+#define HWRU_SPORE_MAGIC 0x48535052u
+#define HWRU_SPORE_VERSION 1u
 
-static int qspore_save(const MetaW *mw, const char *path, const PeriodicTable *pt, const Chambers *ch) {
+static int howru_spore_save(const MetaW *mw, const char *path, const PeriodicTable *pt, const Chambers *ch) {
     const char *slash = strrchr(path, '/');
     if (slash) {
         char dir[256];
@@ -1336,7 +1316,7 @@ static int qspore_save(const MetaW *mw, const char *path, const PeriodicTable *p
     }
     FILE *f = fopen(path, "wb");
     if (!f) return 0;
-    uint32_t magic = QSPORE_MAGIC, ver = QSPORE_VERSION;
+    uint32_t magic = HWRU_SPORE_MAGIC, ver = HWRU_SPORE_VERSION;
     fwrite(&magic, 4, 1, f);
     fwrite(&ver, 4, 1, f);
     fwrite(ch->act, sizeof(float), 6, f);
@@ -1366,12 +1346,12 @@ static int qspore_save(const MetaW *mw, const char *path, const PeriodicTable *p
     return 1;
 }
 
-static int qspore_load(MetaW *mw, const char *path, PeriodicTable *pt, Chambers *ch) {
+static int howru_spore_load(MetaW *mw, const char *path, PeriodicTable *pt, Chambers *ch) {
     FILE *f = fopen(path, "rb");
     if (!f) return 0;
     uint32_t magic, ver;
     if (fread(&magic, 4, 1, f) != 1 || fread(&ver, 4, 1, f) != 1 ||
-        magic != QSPORE_MAGIC || ver != QSPORE_VERSION) {
+        magic != HWRU_SPORE_MAGIC || ver != HWRU_SPORE_VERSION) {
         fclose(f);
         return 0;
     }
@@ -1523,10 +1503,11 @@ static int response_boundary_after_marker(const char *s) {
 
 /* ───────────────────────── Main generator ───────────────────────── */
 
-static int howru_generate(TF *t, const BPE *bpe, MetaW *m, Chambers *c, Parliament *p, const Docs *docs,
-                          const char *human, int max_new, char *out_text, int out_sz) {
+static int howru_generate(TF *t, const BPE *bpe, MetaW *m, Chambers *c, Parliament *p,
+                          const PeriodicTable *pt, const Docs *docs, const char *human,
+                          int max_new, char *out_text, int out_sz) {
     char prompt_text[4096];
-    snprintf(prompt_text, sizeof(prompt_text), "Q: %s\n\n/RESONATING:\n", human);
+    snprintf(prompt_text, sizeof(prompt_text), "HUMAN: %s\n\n/RESONATING:\n", human);
 
     int prompt_ids[MAX_SEQ], human_ids[1024];
     int pn = bpe_encode(bpe, (const uint8_t *)prompt_text, (int)strlen(prompt_text), prompt_ids, MAX_SEQ);
@@ -1534,7 +1515,7 @@ static int howru_generate(TF *t, const BPE *bpe, MetaW *m, Chambers *c, Parliame
     if (pn < 1 || pn >= t->CTX - 1) return -1;
 
     meta_ingest(m, human_ids, hn, 0.02f);
-    chambers_feel(c, human, NULL); // periodic table not used here, but we have it globally
+    chambers_feel(c, human, pt);
     const ResonantDoc *doc = docs_choose(docs, human_ids, hn, m);
     float *human_dir = xcalloc(t->D, sizeof(float));
     float *doc_dir = NULL;
@@ -1646,7 +1627,7 @@ static int howru_generate(TF *t, const BPE *bpe, MetaW *m, Chambers *c, Parliame
             ;
     }
 
-    chambers_feel(c, out_text, NULL);
+    chambers_feel(c, out_text, pt);
     c->coherence = clampf(0.88f * c->coherence + 0.12f * (has_howru_marker(out_text) ? 1.0f : 0.2f), 0, 1);
     c->phase_lock = clampf(0.94f * c->phase_lock + 0.06f * c->coherence, 0, 1);
     meta_ingest(m, ctx + pn, cl - pn, 0.004f);
@@ -1662,8 +1643,8 @@ static int howru_generate(TF *t, const BPE *bpe, MetaW *m, Chambers *c, Parliame
 /* ───────────────────────── main ───────────────────────── */
 
 int main(int argc, char **argv) {
-    printf("howru — Q trained on contact (with SQLite memory)\n");
-    printf("Q -> /RESONATING/ -> HOWRU\n");
+    printf("howru — contact-resonance engine (with SQLite memory)\n");
+    printf("HUMAN -> /RESONATING/ -> HOWRU\n");
     printf("COA — Chain of Arianna\n\n");
 
     if (argc < 3) {
@@ -1691,7 +1672,6 @@ int main(int argc, char **argv) {
     int cn = bpe_encode(&bpe, raw, (int)sz, corpus, (int)sz);
     MetaW *m = xcalloc(1, sizeof(MetaW));
     meta_build(m, corpus, cn, bpe.vocab_size);
-    free(raw);
 
     TF t;
     if (weighted) {
@@ -1706,13 +1686,14 @@ int main(int argc, char **argv) {
 
     PeriodicTable pt;
     periodic_init(&pt);
-    periodic_build_from_text(&pt, (const char *)corpus);
+    periodic_build_from_text(&pt, (const char *)raw);
+    free(raw);
 
     Chambers ch;
     chambers_init(&ch);
 
     // Load memory (SQLite first, then binary spore)
-    if (qsqlite_load(m, "howru.sqlite", &pt, &ch)) {
+    if (howru_sqlite_load(m, "howru.sqlite", &pt, &ch)) {
         printf("  [SQLite memory loaded]\n");
     } else {
         FILE *mf = fopen("howru.memory", "rb");
@@ -1774,7 +1755,7 @@ int main(int argc, char **argv) {
             printf("  [binary memory loaded]\n");
         }
         // try spore
-        if (qspore_load(m, "spores/howru.spore.bin", &pt, &ch))
+        if (howru_spore_load(m, "spores/howru.spore.bin", &pt, &ch))
             printf("  [spore loaded]\n");
     }
 
@@ -1784,26 +1765,26 @@ int main(int argc, char **argv) {
     docs_load(&docs, "docs", &bpe);
 
     printf("vocab=%d corpus=%d tokens model=%s D=%d L=%d docs=%d\n",
-           bpe.vocab_size, cn, weighted ? "QPTQ" : "MetaWeights-only", t.D, t.NL, docs.n);
+           bpe.vocab_size, cn, weighted ? "Howru weights" : "MetaWeights-only", t.D, t.NL, docs.n);
     printf("type a message; 'quit' exits\n\n");
 
     char input[2048], output[16384];
     while (1) {
-        printf("Q: ");
+        printf("HUMAN: ");
         fflush(stdout);
         if (!fgets(input, sizeof(input), stdin)) break;
         input[strcspn(input, "\r\n")] = 0;
         if (!input[0]) continue;
         if (!strcmp(input, "quit") || !strcmp(input, "exit")) break;
 
-        int n = howru_generate(&t, &bpe, m, &ch, &parl, &docs, input,
+        int n = howru_generate(&t, &bpe, m, &ch, &parl, &pt, &docs, input,
                                DEFAULT_MAX_NEW, output, sizeof(output));
         if (n < 0) { printf("[input exceeds context]\n\n"); continue; }
         printf("\n/RESONATING:\n%s\n\n", output);
     }
 
     // Save all state
-    qsqlite_save(m, "howru.sqlite", &pt, &ch);
+    howru_sqlite_save(m, "howru.sqlite", &pt, &ch);
     // Also save binary memory (backward compatible)
     FILE *mf = fopen("howru.memory", "wb");
     if (mf) {
@@ -1821,7 +1802,7 @@ int main(int argc, char **argv) {
         fwrite(&ch, sizeof(ch), 1, mf);
         fclose(mf);
     }
-    qspore_save(m, "spores/howru.spore.bin", &pt, &ch);
+    howru_spore_save(m, "spores/howru.spore.bin", &pt, &ch);
     printf("\nresonance is unbreakable.\n");
 
     free(corpus);

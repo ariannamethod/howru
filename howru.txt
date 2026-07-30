@@ -1,4 +1,4 @@
-Q: how r u
+HUMAN: how r u
 
 /RESONATING:
 This is a casual opening for contact. The shortened spelling makes the message quick and informal, not necessarily emotionally heavy./
@@ -6,7 +6,7 @@ This is a casual opening for contact. The shortened spelling makes the message q
 HOWRU: I’m here. How are you?  
   
   
-Q: wrote fedya idk why
+HUMAN: wrote fedya idk why
 
 /RESONATING:
 He wrote to Fedya, so Fedya is probably someone who can receive a message. The action has already happened. “I don’t know why” comes after the contact, which may mean the reason became unclear only after sending it. There is not enough information to assume conflict or intimacy./
@@ -14,7 +14,7 @@ He wrote to Fedya, so Fedya is probably someone who can receive a message. The a
 HOWRU: What did you write to Fedya?  
   
 
-Q: i miss leo
+HUMAN: i miss leo
 
 /RESONATING:
 He misses Leo. The phrase places Leo inside absence and attachment. Leo is probably a person, although the name itself does not need to be known. Nothing explains what happened between them, so the story should remain open./

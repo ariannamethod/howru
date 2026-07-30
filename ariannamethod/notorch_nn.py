@@ -1,26 +1,24 @@
 """
-notorch_nn.py — PostGPT-Q (ε substrate) trainer API backed by libnotorch (ctypes).
+notorch_nn.py — Howru epsilon-substrate trainer API backed by libnotorch.
 
-NO PyTorch. Q's transformer substrate (θ = ε + γ + αδ — this trains ε) runs on
-notorch (pure-C tensor/autograd) through ctypes. Q's weights were originally
-trained on an A100 with torch; this gives Q a from-scratch, torch-free trainer
-that exports the same QPTQ .bin the C/JS/Python inference engines load.
+NO PyTorch. Howru's transformer substrate runs on notorch (pure-C
+tensor/autograd) through ctypes and exports the same weight layout howru.c loads.
 
-Q's triple attention, mapped to notorch tape ops (all verified):
+Howru's triple attention, mapped to notorch tape ops:
   Content QK^T        -> nt_mh_causal_attention   (scale 1/sqrt(HD))
   RRPRAM x@Wr         -> nt_rrpram_attention       (scores = xn_i . Wr[h][:,p], causal)
   Janus echo          -> vjp ⊙ (wjp / ||wjp||) via nt_seq_rmsnorm + nt_scale + nt_mul
   per-mechanism gate  -> nt_sigmoid + nt_seq_gate  (out[t,d] = mech[t,d]*gate[t,gi])
   combine             -> nt_concat ; project -> nt_seq_linear (wo)
   MLP                 -> nt_seq_linear (up) -> nt_relu -> nt_seq_linear (dn)
-  norm                -> nt_seq_rmsnorm with a FIXED ones gamma (q's norm is param-free)
+  norm                -> nt_seq_rmsnorm with a FIXED ones gamma
   output (tied)       -> nt_seq_linear on tok ; loss -> nt_seq_cross_entropy
 
 The per-mechanism gate bias gb IS trained, via the augmented-gate trick: gws is
 [nm, D+1] and xn gets a constant-1 channel appended (nt_concat), so seq_linear gives
 gws@xn + gb with gb as the last column — no broadcast-add op needed. The exporter splits
 it back into gws[nm,D] + gbs[nm]. The magnitude "transformer gate" (clamp logit-mag) is
-inference-only (applied by postgpt_q.c), so training optimizes the raw logits.
+inference-only (applied by howru.c), so training optimizes the raw logits.
 """
 
 import ctypes
@@ -201,15 +199,15 @@ def seed(s):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# Q ENGINE — builds PostGPT-Q's ε transformer (triple gated attention) on the tape
+# HOWRU ENGINE — builds Howru's epsilon transformer on the tape
 # ═══════════════════════════════════════════════════════════════════════════════
 
-class QEngine:
+class HowruEngine:
     """
-    Forward/backward/update for PostGPT-Q's transformer substrate on the notorch tape.
+    Forward/backward/update for Howru's transformer substrate on the notorch tape.
 
     cfg: V, D, NL, CTX, NC, NR, NJ, HD, nm (mechanism count).
-    params: flat ordered list, per QPTQ layout:
+    params: flat ordered list, per Howru weight layout:
         [tok, pos,
          (per layer: [wq,wk,vc if NC] , [wr,vr if NR] , [wj,vj if NJ] ,
           [gws_aug [nm,D+1] if nm>1 — last column is the trained gate bias gb] ,
@@ -330,4 +328,4 @@ class QEngine:
         return vals
 
 
-__all__ = ['Tensor', 'QEngine', 'softmax', 'multinomial', 'seed', '_lib', '_tstruct']
+__all__ = ['Tensor', 'HowruEngine', 'softmax', 'multinomial', 'seed', '_lib', '_tstruct']
