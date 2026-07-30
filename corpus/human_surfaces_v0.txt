@@ -1,0 +1,481 @@
+# Howru human surface list v0
+#
+# One human message per line. These are not final training records and do not
+# include the HUMAN/RESONATING/HOWRU labels. They are seed surfaces for later
+# generation of complete corpus entries.
+#
+# Keep ordinary human contact central: small talk, daily actions, questions,
+# fragments, names, places, tiredness, jokes, silence, uncertainty, and noisy
+# typing. Not every line should imply depth.
+
+## greetings and contact openings
+how are you
+how r u
+howru
+hey
+hi
+hello
+yo
+gm
+good morning
+morning
+evening
+u there
+you awake
+are you here
+can i talk to you
+talk to me
+say something
+what are you doing
+what u doing
+wyd
+how is your day
+how was your day
+long day?
+missed you
+i'm back
+im back
+there you are
+dont disappear
+stay with me a bit
+
+## light ordinary check-ins
+did you sleep
+did u eat
+are you okay
+you good?
+everything fine?
+what's up
+whats up
+anything new
+how's it going
+hows life
+how's your mood
+are we okay
+you busy?
+got a minute?
+can i ask you something
+can i tell you something
+do you mind if i ramble
+listen
+ok listen
+random question
+stupid question
+quick thing
+
+## coffee food and small routines
+i made coffee
+made coffee
+coffee?
+need coffee
+i need tea
+tea tastes weird today
+i forgot to eat
+i finally ate
+made pasta
+burned my food
+i ordered pizza
+this soup is good
+i want something sweet
+im hungry
+not hungry but i should eat
+i drank too much coffee
+coffee isnt helping
+good coffee today
+breakfast was sad
+made eggs
+forgot the kettle
+the fridge is empty
+i hate grocery shopping
+i bought bread
+i spilled coffee
+
+## sleep tiredness and body state
+i'm tired
+im tired
+so tired
+im tireddd
+cant sleep
+can't sleep again
+slept badly
+i overslept
+i need a nap
+i just woke up
+my head hurts
+my chest feels tight
+my throat feels weird
+my hands are shaking
+my stomach hurts
+i feel weird today
+i feel nothing
+i feel heavy
+i feel light for once
+i'm cold
+it's too hot
+i need a shower
+took a shower
+going to sleep
+good night
+night
+dont let me doomscroll
+
+## work school and tasks
+i have work
+work is killing me
+work was fine
+meeting soon
+i hate meetings
+my boss texted
+teacher emailed me
+i have homework
+i missed the deadline
+deadline tomorrow
+i finished it
+i didnt finish
+i should open the laptop
+i opened the computer
+computer is slow
+my code broke
+i fixed it somehow
+sent the file
+deleted the file
+i lost the draft
+need to answer emails
+i dont want to answer emails
+calendar is packed
+i have nothing to do
+
+## movement road and places
+i'm driving
+im on the bus
+train is late
+walking home
+going home
+dont want to go home
+i want to go home
+just got home
+left home
+i'm outside
+im in bed
+at the kitchen
+at the station
+going to Haifa
+driving to Tel Aviv
+i miss Berlin
+i hate Paris
+London feels empty
+New York is too loud
+i want the sea
+never seen the sea
+this street feels familiar
+wrong bus lol
+got lost again
+arrived
+
+## weather and environment
+it's raining
+it is raining
+rain again
+the sky looks strange
+nice weather
+too bright outside
+wind is insane
+it smells like winter
+summer is disgusting
+sun finally came out
+everything is gray
+the room is too quiet
+the room is loud
+neighbors are fighting
+someone is drilling
+my window is open
+lights went out
+phone battery is dying
+wifi died
+
+## phones messages and contact actions
+i texted Max
+texted max
+wrote to Fedya
+wrote fedya idk why
+i called Anna
+called her
+he called me
+she wrote back
+he didnt answer
+no reply yet
+still no reply
+i sent it
+finally sent it
+i deleted the message
+i unsent it
+i blocked him
+she blocked me
+i unblocked her
+typing and deleting
+left him on read
+he left me on read
+i should reply
+dont want to reply
+should i call him
+maybe i should text her
+what do i say
+he just said ok
+she only sent a dot
+why did i send that
+
+## unknown names and relation probes
+i miss Leo
+miss leo ngl
+who is Leo to me
+i called Neris
+Neris called me
+i bought a Neris
+i drove through Neris
+i miss Neral
+Talem wrote to me
+i blocked Varo
+Varo came back
+i dreamed about Miri
+Olan didnt answer
+i sent Juno a photo
+Maksim is weird today
+Anna said nothing
+Fedya knows
+Leo would laugh
+Neral is not a person
+i found an old Maru
+i met Paris yesterday
+Paris wrote to me
+i bought Paris
+
+## affection absence and relationships
+i miss him
+i miss her
+i miss them
+i miss it
+i want her back
+i want him gone
+i cant forget her
+can't stop thinking about him
+i dreamed about someone
+he came back
+she came back
+he left again
+she didnt stay
+i dont care anymore
+i care too much
+i think i love him
+i dont know if i love her
+she hates me
+he is kind to me
+i am jealous
+i feel stupid for missing him
+we talked
+we didnt talk
+we almost talked
+i saw his name
+her voice is in my head
+
+## emotion and mood
+i'm sad
+im sad
+i'm okay
+im fine
+I'm fine.
+I'M FINE
+yeah im fine
+not fine
+i feel amazing
+i feel good today
+i feel bad today
+i feel bored
+so bored
+i'm angry
+angry with myself
+i'm scared
+im anxious
+i feel calm
+weirdly calm
+i'm excited
+i feel guilty
+i'm embarrassed
+i regret it
+i dont regret it
+i feel lonely
+not lonely exactly
+i feel seen
+i feel invisible
+nothing feels real
+
+## decisions uncertainty and after-action
+i dont know what to do
+idk what to do
+maybe i should call him
+maybe not
+i changed my mind
+changed my mind again
+i already sent it
+too late now
+what now
+should i go
+should i stay
+do i apologize
+do i wait
+do i answer
+do i ignore this
+i think i messed up
+i didnt mean it
+maybe it was fine
+maybe im overthinking
+i cant decide
+tell me what to do
+dont tell me what to do
+
+## music art and media
+i love this song
+this song hurts
+this melody is killing me
+listening to Rammstein
+same song on repeat
+i wrote a poem
+i cant finish the chorus
+guitar sounds strange
+movie was boring
+that scene broke me
+book made me sad
+i drew something
+my painting sucks
+sent you a song
+listen to this
+do you like music
+what music do you like
+i hate this playlist
+this song smells like summer
+
+## jokes play and low-stakes nonsense
+lol
+lmao
+bro
+bruh
+dont laugh
+you will laugh
+look at this lol
+im an idiot
+that was stupid
+tiny victory
+dramatic coffee moment
+the chair betrayed me
+i fought the printer and lost
+my sock disappeared
+today is cancelled
+no thoughts only soup
+brain offline
+send help but not seriously
+i am being normal about this
+
+## fragments and compressed messages
+same
+again
+not again
+too much
+too loud
+too quiet
+whatever
+nevermind
+forget it
+wait
+wait wait
+ok
+ok no
+nope
+yes but no
+i mean
+you know
+idk man
+just tired
+not sure
+maybe
+later
+soon
+almost
+
+## stronger but still ordinary vulnerability
+i dont want to be alone tonight
+i feel like nobody sees me
+i think everything is falling apart
+i cant do this
+I CANT DO THIS
+i dont want to talk about it
+i wanna talk but i dont
+i'm scared of going there
+i hate going back there
+i havent slept in two days
+i feel like a bad person
+i said something cruel
+i think i ruined it
+he is not coming back
+she wont answer
+i dont know how to stop thinking
+i need someone to hear me
+please dont make this big
+please take this seriously
+
+## non-native or damaged English
+i am very tired today yes
+i make coffee and still sleep
+why he not answer
+she write me maybe later
+i go home now but dont want
+this song make hurt
+i am not good in words
+sorry my english is bad
+i dont understand what i feeling
+it is like empty but not empty
+i was call him yesterday
+i send message wrong maybe
+why city make me sad
+today weather angry
+my head have noise
+i want say something but no words
+
+## direct questions to howru
+what are you
+are you alive
+do you remember me
+do you know me
+why are you called howru
+are you a chatbot
+can you feel
+can you lie
+will you forget this
+do you care
+are you real
+what do you want
+what should i call you
+can you stay small
+why do you answer like that
+what is resonating
+are you thinking
+are you just text
+
+## boundary and contact control
+dont analyze me
+dont be deep
+be honest
+be normal
+be weird
+dont therapize me
+say it plainly
+just answer
+ask me something
+dont ask me anything
+make it lighter
+no advice
+i need advice
+i need a joke
+i need quiet
+i only wanted to say hi
+that was too much
+that was enough
+can we start over

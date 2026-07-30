@@ -605,12 +605,6 @@ static void chambers_feel(Chambers *c, const char *text, const PeriodicTable *pt
     chambers_tick(c, 4);
 }
 
-static int ch_dominant(const Chambers *c) {
-    int dom = 0;
-    for (int i = 1; i < N_CHAMBERS; i++) if (c->act[i] > c->act[dom]) dom = i;
-    return dom;
-}
-
 /* ───────────────────────── Howru transformer weights ───────────────────────── */
 
 typedef struct {
@@ -718,6 +712,9 @@ static int tf_load(TF *t, const char *path) {
 static void tf_forward(TF *t, int tok, int pos) {
     int D = t->D, HD = t->HD, NC = t->NC, NR = t->NR, NJ = t->NJ;
     int nm = (NC > 0) + (NR > 0) + (NJ > 0), sl = pos + 1;
+    size_t nc_hd = (size_t)NC * (size_t)HD;
+    size_t nr_hd = (size_t)NR * (size_t)HD;
+    size_t nj_hd = (size_t)NJ * (size_t)HD;
     float *x = xcalloc(D, sizeof(float));
     float *xn = xcalloc(D, sizeof(float));
     float *res = xcalloc(D, sizeof(float));
@@ -730,29 +727,30 @@ static void tf_forward(TF *t, int tok, int pos) {
         float *co = NULL, *ro = NULL, *jo = NULL;
 
         if (NC > 0) {
-            co = xcalloc((size_t)NC * HD, sizeof(float));
-            float *q = xcalloc((size_t)NC * HD, sizeof(float));
-            float *k = xcalloc((size_t)NC * HD, sizeof(float));
-            float *v = xcalloc((size_t)NC * HD, sizeof(float));
+            co = xcalloc(nc_hd, sizeof(float));
+            float *q = xcalloc(nc_hd, sizeof(float));
+            float *k = xcalloc(nc_hd, sizeof(float));
+            float *v = xcalloc(nc_hd, sizeof(float));
             matmul(q, xn, t->L[li].wq, D, NC * HD);
             matmul(k, xn, t->L[li].wk, D, NC * HD);
             matmul(v, xn, t->L[li].vc, D, NC * HD);
-            memcpy(t->kc[li] + (size_t)pos * NC * HD, k, (size_t)NC * HD * sizeof(float));
-            memcpy(t->vcc[li] + (size_t)pos * NC * HD, v, (size_t)NC * HD * sizeof(float));
+            memcpy(t->kc[li] + (size_t)pos * nc_hd, k, nc_hd * sizeof(float));
+            memcpy(t->vcc[li] + (size_t)pos * nc_hd, v, nc_hd * sizeof(float));
             for (int h = 0; h < NC; h++) {
+                size_t h_off = (size_t)h * (size_t)HD;
                 float *sc = xcalloc(sl, sizeof(float));
                 for (int p = 0; p < sl; p++) {
                     float dot = 0;
                     for (int d = 0; d < HD; d++)
-                        dot += q[h * HD + d] * t->kc[li][(size_t)p * NC * HD + h * HD + d];
+                        dot += q[h_off + (size_t)d] * t->kc[li][(size_t)p * nc_hd + h_off + (size_t)d];
                     sc[p] = dot / sqrtf((float)HD);
                 }
                 softmax(sc, sl);
                 for (int d = 0; d < HD; d++) {
                     float z = 0;
                     for (int p = 0; p < sl; p++)
-                        z += sc[p] * t->vcc[li][(size_t)p * NC * HD + h * HD + d];
-                    co[h * HD + d] = z;
+                        z += sc[p] * t->vcc[li][(size_t)p * nc_hd + h_off + (size_t)d];
+                    co[h_off + (size_t)d] = z;
                 }
                 free(sc);
             }
@@ -762,11 +760,12 @@ static void tf_forward(TF *t, int tok, int pos) {
         }
 
         if (NR > 0) {
-            ro = xcalloc((size_t)NR * HD, sizeof(float));
-            float *v = xcalloc((size_t)NR * HD, sizeof(float));
+            ro = xcalloc(nr_hd, sizeof(float));
+            float *v = xcalloc(nr_hd, sizeof(float));
             matmul(v, xn, t->L[li].vr, D, NR * HD);
-            memcpy(t->vrc[li] + (size_t)pos * NR * HD, v, (size_t)NR * HD * sizeof(float));
+            memcpy(t->vrc[li] + (size_t)pos * nr_hd, v, nr_hd * sizeof(float));
             for (int h = 0; h < NR; h++) {
+                size_t h_off = (size_t)h * (size_t)HD;
                 float *sc = xcalloc(sl, sizeof(float));
                 for (int p = 0; p < sl; p++) {
                     float z = 0;
@@ -778,8 +777,8 @@ static void tf_forward(TF *t, int tok, int pos) {
                 for (int d = 0; d < HD; d++) {
                     float z = 0;
                     for (int p = 0; p < sl; p++)
-                        z += sc[p] * t->vrc[li][(size_t)p * NR * HD + h * HD + d];
-                    ro[h * HD + d] = z;
+                        z += sc[p] * t->vrc[li][(size_t)p * nr_hd + h_off + (size_t)d];
+                    ro[h_off + (size_t)d] = z;
                 }
                 free(sc);
             }
@@ -787,9 +786,9 @@ static void tf_forward(TF *t, int tok, int pos) {
         }
 
         if (NJ > 0) {
-            jo = xcalloc((size_t)NJ * HD, sizeof(float));
-            float *w = xcalloc((size_t)NJ * HD, sizeof(float));
-            float *v = xcalloc((size_t)NJ * HD, sizeof(float));
+            jo = xcalloc(nj_hd, sizeof(float));
+            float *w = xcalloc(nj_hd, sizeof(float));
+            float *v = xcalloc(nj_hd, sizeof(float));
             matmul(w, xn, t->L[li].wj, D, NJ * HD);
             matmul(v, xn, t->L[li].vj, D, NJ * HD);
             float norm = 0;
