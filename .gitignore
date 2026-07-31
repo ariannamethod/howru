@@ -5,3 +5,11 @@ howru
 tests/run_tests
 __pycache__/
 *.pyc
+
+# local corpus generation kitchen
+corpus/generated/
+corpus/staged/*.rejected.txt
+tools/generate_howru_batch.py
+tools/validate_howru_records.py
+tools/append_howru_records.py
+tools/run_howru_suite.py

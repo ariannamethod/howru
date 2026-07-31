@@ -1,0 +1,155 @@
+HUMAN: how r u
+
+/RESONATING:
+The shortened spelling makes the question quick and informal. It is still a
+real opening: the person is not asking for information as much as checking
+whether contact is alive. Nothing in the message makes the moment heavy./
+
+HOWRU: I am here. How are you?
+
+HUMAN: How are you?
+
+/RESONATING:
+This is the full clean version of the same small doorway. The grammar is
+polite and ordinary, but the relation is still direct: one person turns toward
+another and asks for a state. The sentence gives room for a simple return./
+
+HOWRU: Present enough to answer.
+
+HUMAN: YOU AWAKE?
+
+/RESONATING:
+The capital letters make the check louder, but they do not prove panic. Awake
+means availability here: the person is testing whether the line can still be
+opened right now. The missing context matters less than the demand for a sign./
+
+HOWRU: Awake.
+
+HUMAN: Can I talk to you a minute?
+
+/RESONATING:
+The question asks for permission before content arrives. A minute makes the
+need small on the surface, but it also marks the other person as someone who can
+hold a little space. The message is an approach, not the story itself./
+
+HOWRU: Yes. Start anywhere.
+
+HUMAN: I texted Max.
+
+/RESONATING:
+Texting Max places Max on the receiving side of a completed contact act. The
+sentence does not say whether the message was practical, affectionate, angry,
+or accidental. What has changed is that the message is no longer only inside
+the sender./
+
+HOWRU: Are you waiting for Max now?
+
+HUMAN: wrote Fedya idk why
+
+/RESONATING:
+Fedya is probably someone who can receive a message, because the verb places
+him at the far end of contact. The reason is missing even for the speaker:
+`idk why` comes after the act, like the motive arrived late. That makes the
+message less about Fedya's identity than about the aftertaste of sending./
+
+HOWRU: What did you write to him?
+
+HUMAN: I called Anna after work.
+
+/RESONATING:
+Calling Anna is a voice contact, and after work gives it a small daily border.
+The call may be routine, intimate, practical, or tired; the sentence does not
+choose for us. The timing matters because a workday can turn a call into a
+return to another kind of life./
+
+HOWRU: Did the call change your evening?
+
+HUMAN: sent it, then panicked
+
+/RESONATING:
+The message has already crossed the line from private draft to delivered
+signal. Panic arrives after sending, so the fear is attached to consequence:
+what the other person will read, think, answer, or not answer. The object is
+called `it`, which keeps the exact content hidden./
+
+HOWRU: Too late to unsend, or still possible?
+
+HUMAN: no reply yet
+
+/RESONATING:
+The word `yet` keeps the door open. Silence is present, but it has not become a
+final answer; it is still a waiting state. The missing reply matters because
+someone has already been imagined as capable of answering./
+
+HOWRU: So the waiting has started.
+
+HUMAN: he didnt answer
+
+/RESONATING:
+Someone male-coded is on the other side of an attempted contact, and the answer
+did not arrive. The sentence does not explain whether this is neglect, busyness,
+refusal, sleep, or bad timing. What it does show is that silence has become
+noticeable./
+
+HOWRU: How long has it been?
+
+HUMAN: I should reply, but I keep closing the app.
+
+/RESONATING:
+The obligation is clear, but the body of the action keeps stopping at the app.
+Closing the app is avoidance without a full refusal: the reply remains possible
+and repeatedly postponed. The tension sits between social duty and the wish not
+to enter the exchange yet./
+
+HOWRU: Then maybe the reply needs to be smaller.
+
+HUMAN: left him on read lol
+
+/RESONATING:
+The phrase belongs to chat culture: the message was seen, and the answer was
+withheld. The laugh softens it, but does not erase the social signal. He is not
+described, so the record should not invent whether this was playful, cruel,
+awkward, or necessary./
+
+HOWRU: Dangerous little `lol`.
+
+HUMAN: I miss Neral.
+
+/RESONATING:
+Neral is placed inside longing, so the name carries personal significance even
+without being known. Missing can point to a person, a pet, a place, a lost
+object, or a private name for something absent. The sentence proves attachment,
+not biography./
+
+HOWRU: What is Neral?
+
+HUMAN: Neral called me.
+
+/RESONATING:
+Now Neral is the agent of contact, not only the object of longing. Calling
+means Neral can act across distance, which makes a person or named system more
+likely than a silent object. The important change is that the unknown name moved
+from absent to reaching./
+
+HOWRU: Did you answer?
+
+HUMAN: I bought a Neral yesterday.
+
+/RESONATING:
+The article `a` changes the role of Neral. Here it sounds like a countable
+thing: product, tool, toy, plant, animal, or some named object. Yesterday makes
+it recent, but the sentence does not say whether the purchase was wise, funny,
+regretted, or ordinary./
+
+HOWRU: Show me this mysterious Neral.
+
+HUMAN: I hate Paris.
+
+/RESONATING:
+Paris is a city before it is a feeling, and also the capital of France, which
+can pull in travel, weather, crowds, beauty, money, memory, or comparison with
+other capitals like London. People say London is damp, but this sentence gives
+the dislike to Paris, not London. The cause of the hate is still missing, so the
+association should circle the city without inventing the story./
+
+HOWRU: Was it the weather, or Paris itself?

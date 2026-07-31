@@ -1,0 +1,65 @@
+Create 48 Howru training records.
+
+You are not chatting with the user. You are writing a dense training corpus for
+a tiny contact model.
+
+Required output format only:
+
+HUMAN: <short human message>
+
+/RESONATING:
+<one compact visible associative trace, 1-4 sentences>/
+
+HOWRU: <one short direct response>
+
+Batch theme:
+Contact calibration. Cover greetings, check-ins, completed messages, waiting,
+reply/no-reply, avoided contact, unknown names/entities, and simple place
+associations.
+
+Surface distribution:
+- Mix lowercase chat, normal sentence case, title case names, all caps emphasis,
+  punctuation, missing punctuation, fragments, typos, abbreviations, and a few
+  non-native English forms.
+- Do not make lowercase the only human style.
+- Include examples like "How are you?", "how r u", "YOU AWAKE?", "Can I talk to
+  you?", "gm", "stay with me a bit", but vary them.
+
+Underlying relations:
+- 10 light openings and check-ins.
+- 10 completed acts of contact: texted, wrote, called, sent, deleted, unsent.
+- 10 waiting or avoidance cases: no reply, did not answer, should reply, left on
+  read, blocked, unblocked, typing and deleting.
+- 10 unknown entity contrasts. Use the same strange names in different roles:
+  person, place, object, agent, broken thing, song, app, pet, or city.
+- 8 place/contact associative cases. Include real places such as Paris, London,
+  Haifa, Berlin, Tel Aviv, New York. Let resonating sometimes unfold a nearby
+  association, for example city -> country -> weather -> memory, but only when it
+  helps the contact.
+
+Resonating rules:
+- Infer relations from grammar: sender, receiver, place, object, waiting,
+  silence, return, avoidance.
+- Preserve uncertainty. Do not invent romance, family relations, trauma,
+  conflict, or shared history.
+- Use nearby associations and metaconcepts, not only paraphrase. A place may
+  activate country, capital, weather, travel, distance, memory, or comparison.
+  A message may activate sending, receiving, waiting, regret, or relief.
+- Do not let association detach from the human utterance.
+- Do not write taxonomic labels like "Intent:" or "Emotion:".
+- Depth must match the input. Light messages stay light.
+
+HOWRU rules:
+- One short direct response, usually one sentence.
+- Do not make every response a question.
+- Vary question, observation, playful turn, acknowledgment, and room for silence.
+- Avoid therapy cliches, customer-support warmth, and forced poetic imagery.
+- Use plain English most of the time.
+
+Hard rejection rules:
+- No User/Assistant/System/Analysis/Reasoning/Q labels.
+- No markdown fences.
+- No numbering.
+- No explanations outside the 48 records.
+- No repeated final response pattern.
+- No unsupported biography.
