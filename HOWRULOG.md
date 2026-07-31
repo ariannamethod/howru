@@ -2,6 +2,35 @@
 
 This log is reverse chronological: newest entries go at the top.
 
+## 2026-07-31 - Batch 024 Resonance/Register/Boundary Added
+
+Ran the next GPT-4.1 corpus pass with current `howru.txt` as gravitational
+memory and the sharpened director prompt as instruction. The raw API output was
+useful but not accepted directly: it produced 25 records instead of 24, had one
+malformed resonating close, and carried a little support-bot polish.
+
+Curated the material into
+`corpus/staged/batch_024_resonance_register_boundary.txt` with 24 validated
+records. The batch adds:
+
+- stronger sentence-case and formal-ish human inputs;
+- `resonance` as a recurring island without making it every line's ornament;
+- contact correction where resonance fails instead of becoming agreement;
+- protective boundary contrasts for rude, objectifying, or hostile contact;
+- associative leaps through inbox, room silence, umbrella/weather/body, old
+  conversation echoes, and strange apartment hum.
+
+Appended the staged batch into `howru.txt`, bringing the corpus to 439 complete
+records and 106964 bytes. Rebuilt `howru.merges` from the expanded corpus.
+
+Verification:
+
+- `python3 tools/validate_howru_records.py corpus/staged/batch_024_resonance_register_boundary.txt --expect 24`;
+- `python3 tools/validate_howru_records.py howru.txt --expect 439`;
+- forbidden role/apology scan over `howru.txt`;
+- `python3 tests/generation_regression.py`;
+- `python3 train_howru.py --steps 1 --seq_len 16 --ctx 32 --save /tmp/howru_smoke_weights.bin`.
+
 ## 2026-07-31 - Opening Corpus Traces De-Explained
 
 Manually revised the opening `howru.txt` seed records to reduce explanatory
