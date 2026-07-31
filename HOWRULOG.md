@@ -2,6 +2,31 @@
 
 This log is reverse chronological: newest entries go at the top.
 
+## 2026-07-31 - Batch 026 Meme Logic Added
+
+Ran GPT-4.1 for the first deliberate humor layer:
+`meme_logic_absurd_contact`. The target was not "make jokes" but comic contact:
+deadpan, rude affection, over-literal misreadings, office absurdity, food and
+laundry catastrophes, typo machinery, and meme-like compression that still
+returns to the human.
+
+The raw API output had good material but was not accepted directly. It inserted
+record separators, malformed one resonating close, and validated as the wrong
+record count. Curated it into
+`corpus/staged/batch_026_meme_logic_absurd_contact.txt` as 24 clean records in
+the Howru contract.
+
+Appended the staged batch into `howru.txt`, bringing the corpus to 487 complete
+records and 118813 bytes. Rebuilt `howru.merges` from the expanded corpus.
+
+Verification:
+
+- `python3 tools/validate_howru_records.py corpus/staged/batch_026_meme_logic_absurd_contact.txt --expect 24`;
+- `python3 tools/validate_howru_records.py howru.txt --expect 487`;
+- forbidden role/support-phrase scan over `howru.txt`;
+- `python3 tests/generation_regression.py`;
+- `python3 train_howru.py --steps 1 --seq_len 16 --ctx 32 --save /tmp/howru_smoke_weights.bin`.
+
 ## 2026-07-31 - Batch 025 Associative Leaps Added
 
 Ran GPT-4.1 for a coauthored follow-up theme:
