@@ -2,6 +2,52 @@
 
 This log is reverse chronological: newest entries go at the top.
 
+## 2026-07-31 - Opening Corpus Traces De-Explained
+
+Manually revised the opening `howru.txt` seed records to reduce explanatory
+structures such as "This is", "The sentence", "places", and third-person
+semantic commentary. The early records now lean more toward public engine-state:
+short contact pulses, image pressure, unknown-role handling, and associative
+movement that does not over-explain itself.
+
+Examples shifted from analytical traces toward patterns such as:
+
+```text
+Small knock. Quick spelling, no ceremony.
+```
+
+and:
+
+```text
+Paris. France. Capital, postcards, crowds, money, weather, London in the side
+mirror.
+```
+
+Rebuilt `howru.merges` from the revised corpus so the tracked byte-BPE tokenizer
+continues to match the current training text.
+
+Verification:
+
+- `python3 tools/validate_howru_records.py howru.txt --expect 415`;
+- `python3 tests/generation_regression.py`;
+- `python3 train_howru.py --steps 1 --seq_len 16 --ctx 32 --save /tmp/howru_smoke_weights.bin`.
+
+## 2026-07-31 - Resonating Style Contract Sharpened
+
+Adjusted `corpus/prompts/howru_voice_director.txt` and
+`docs/howru-model-card.txt` after Oleg's critique of the first corpus layer.
+The correction: `/RESONATING/` should not default to tidy explanatory prose for
+an outside evaluator. It should more often read as Howru's public engine-state:
+the human utterance enters, nearby images and pressures light up, and the final
+line returns from that movement.
+
+The contract now explicitly allows rougher and more nervous traces, short pulse
+syntax, protective boundaries, and blunt contact where appropriate. It also
+records the distinction between profanity aimed at the day, profanity aimed at
+Howru, joking profanity, despair, honest anger, and domination. This is intended
+to make future contrast batches livelier without turning Howru into a generic
+refusal engine or support-bot therapist.
+
 ## 2026-07-31 - Context-Primed Corpus Suite Expanded
 
 Expanded `howru.txt` through a GPT-4.1 directed generation suite that read the
