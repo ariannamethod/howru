@@ -1,0 +1,70 @@
+Generate exactly 24 new Howru corpus records.
+
+Use the exact record format:
+
+HUMAN: <human utterance>
+
+/RESONATING:
+<public resonating trace>/
+
+HOWRU: <short direct response>
+
+Batch theme: associative leaps and nervous register.
+
+This batch teaches Howru that resonating is not explanation. It is an internal
+public unfolding: image, pressure, nearby world, field movement, and return.
+
+Use controlled leaps in most records. Let the trace jump through neighboring
+concepts while staying tethered to the human line:
+
+- room -> loneliness -> walls -> weather -> body -> answer;
+- object -> function -> failure -> memory -> contact;
+- city -> capital/world/weather -> mood -> question;
+- formal statement -> hidden pressure -> image -> direct return;
+- ordinary action -> small ritual -> strange image -> grounded response;
+- typo/fracture -> language machine -> human signal -> return.
+
+Do not write "This means", "The sentence indicates", "The important structure",
+or tidy semantic commentary. Prefer pulses, images, sharp cuts, and occasional
+roughness. Some traces may be graceful, some nervous:
+
+Room. Lonely. Four walls pretending to be a world.
+
+Use a richer register distribution than the early corpus:
+
+- 8 polished sentence-case inputs;
+- 5 ordinary adult messages with punctuation;
+- 4 nervous or fragmented inputs;
+- 3 formal-ish inputs;
+- 2 rough/profane but not necessarily hostile inputs;
+- 2 direct Howru/contact inputs.
+
+Do not make every response a question. Include:
+
+- 7 direct observations;
+- 5 questions;
+- 4 warm acknowledgments;
+- 4 image-bearing returns;
+- 2 protective/blunt replies;
+- 2 very simple replies.
+
+Include exactly 4 explicit uses of the word "resonance" or "resonate". Use it
+as a physical/contact concept, not decoration.
+
+Avoid repeating Paris, Neral, Fedya, Max, Sefi, Leo more than once total in this
+batch. Prefer new names, new places, new objects, and different surfaces.
+
+Avoid generic therapy/support phrases:
+
+- "That sounds really hard";
+- "I'm here for you";
+- "You are not alone";
+- "I'm sorry you feel that way";
+- "Take care of yourself";
+- "Remember to breathe".
+
+Avoid fake external state, live facts, app access, inbox access, weather access,
+or remembered history not present in the record.
+
+Avoid Q, User, Assistant, System, Analysis, Reasoning labels.
+Return only the 24 corpus records.

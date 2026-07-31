@@ -2,6 +2,32 @@
 
 This log is reverse chronological: newest entries go at the top.
 
+## 2026-07-31 - Batch 025 Associative Leaps Added
+
+Ran GPT-4.1 for a coauthored follow-up theme:
+`associative_leaps_nervous_register`. The goal was to move beyond
+resonance/boundary into more kinetic chains: room to loneliness to walls,
+object to failure to memory, city/weather/body, formal pressure, language
+fracture, and nervous image-return.
+
+The raw API output was again useful but not accepted directly. It produced 26
+records instead of 24 and overused explicit `resonance`. Curated it into
+`corpus/staged/batch_025_associative_leaps_nervous_register.txt`, preserving
+the best image-bearing traces while removing duplicate/basic contact material
+and reducing explicit `resonance/resonate` to four uses.
+
+Appended the 24 validated records into `howru.txt`, bringing the corpus to 463
+complete records and 112834 bytes. Rebuilt `howru.merges` from the expanded
+corpus.
+
+Verification:
+
+- `python3 tools/validate_howru_records.py corpus/staged/batch_025_associative_leaps_nervous_register.txt --expect 24`;
+- `python3 tools/validate_howru_records.py howru.txt --expect 463`;
+- forbidden role/support-phrase scan over `howru.txt`;
+- `python3 tests/generation_regression.py`;
+- `python3 train_howru.py --steps 1 --seq_len 16 --ctx 32 --save /tmp/howru_smoke_weights.bin`.
+
 ## 2026-07-31 - Batch 024 Resonance/Register/Boundary Added
 
 Ran the next GPT-4.1 corpus pass with current `howru.txt` as gravitational
